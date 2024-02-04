@@ -18,20 +18,19 @@ camera.position.setZ(30);
 renderer.render(scene, camera);
 
 // Create a torus(Geometry)
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+const geometry = new THREE.TorusKnotGeometry( 7.163, 0.386, 300, 20, 12, 11); 
 // Create a material
-const material = new THREE.MeshStandardMaterial({ color: 0xFF6347, wireframe: true });
+const material = new THREE.MeshBasicMaterial( { color: 0x00FFFF }, { wireframe: true }); 
 // Create a mesh
-const torus = new THREE.Mesh(geometry, material);
-// Add the mesh to the scene
-scene.add(torus);
+const torus = new THREE.Mesh( geometry, material ); scene.add( torus );
+
 
 
 function animate() {
 	requestAnimationFrame(animate);
-	// torus.rotation.x += 0.01;
-	// torus.rotation.y += 0.005;
-	// torus.rotation.z += 0.01;
+	torus.rotation.x += 0.01;
+	torus.rotation.y += 0.005;
+	torus.rotation.z += 0.01;
 	renderer.render(scene, camera);
 }
 
