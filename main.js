@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Scene
 const scene = new THREE.Scene();
@@ -20,9 +21,29 @@ renderer.render(scene, camera);
 // Create a torus(Geometry)
 const geometry = new THREE.TorusKnotGeometry( 7.163, 0.386, 300, 20, 12, 11); 
 // Create a material
-const material = new THREE.MeshBasicMaterial( { color: 0x00FFFF }, { wireframe: true }); 
-// Create a mesh
+const material = new THREE.MeshStandardMaterial( { color: 0x00FFFF }); 
+// Create a mesh and add to the scene
 const torus = new THREE.Mesh( geometry, material ); scene.add( torus );
+
+// Create a point light
+const pointLight = new THREE.PointLight(0xffffff);
+pointLight.position.set(1,1,1);
+
+// Create an ambient light
+const ambientLight = new THREE.AmbientLight(0xffffff);
+// Add light to the scene
+scene.add(pointLight, ambientLight);
+
+// Add a helper to the light
+const lightHelper = new THREE.PointLightHelper(pointLight);
+scene.add(lightHelper);
+
+// Add a grid helper
+const gridHelper = new THREE.GridHelper(200, 50);
+scene.add(gridHelper);
+
+// Add a controls
+const controls = new OrbitControls(camera, renderer.domElement);
 
 
 
