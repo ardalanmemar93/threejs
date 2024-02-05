@@ -46,6 +46,33 @@ scene.add(lightHelper);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 
+// Create a Comet
+const cometHeadGeometry = new THREE.SphereGeometry(1, 32, 32);
+const cometHeadMaterial = new THREE.MeshStandardMaterial({ color: 0xFFD700 });
+const cometHead = new THREE.Mesh(cometHeadGeometry, cometHeadMaterial);
+scene.add(cometHead);
+
+const cometTailGeometry = new THREE.BufferGeometry();
+const cometTailMaterial = new THREE.LineBasicMaterial({ color: 0xFFD700, linewidth: 2 });
+
+const cometTailVertices = [];
+for (let i = 0; i < 100; i++) {
+  const t = i / 100;
+  const x = Math.cos(t * Math.PI * 2) * 5;
+  const y = Math.sin(t * Math.PI * 2) * 5;
+  const z = -t * 20;
+
+  cometTailVertices.push(x, y, z);
+}
+
+cometTailGeometry.setAttribute('position', new THREE.Float32BufferAttribute(cometTailVertices, 3));
+const cometTail = new THREE.Line(cometTailGeometry, cometTailMaterial);
+scene.add(cometTail);
+
+cometHead.position.set(0, 0, -20);
+
+
+
 
 // Create a Starfield
 const starfieldGeometry = new THREE.BufferGeometry();
