@@ -87,6 +87,42 @@ scene.add(sun);
 sun.position.z = 30;
 sun.position.setX(-10);
 
+// Particle Ring around the Sun
+const particlesGeometry = new THREE.BufferGeometry();
+const particlesMaterial = new THREE.PointsMaterial({ color: 0x888888, size: 0.1 });
+
+const particlesVertices = [];
+for (let i = 0; i < 1000; i++) {
+  const radius = 30;
+  const theta = Math.random() * Math.PI * 2;
+  const x = Math.cos(theta) * radius;
+  const y = Math.sin(theta) * radius;
+  const z = THREE.MathUtils.randFloatSpread(2);
+  particlesVertices.push(x, y, z);
+}
+
+particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(particlesVertices, 3));
+const particleRing = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particleRing);
+
+// Randomized Asteroid Belt
+function createAsteroid() {
+  const asteroidGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+  const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
+  const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
+
+  const radius = THREE.MathUtils.randFloat(35, 45);
+  const angle = Math.random() * Math.PI * 2;
+  const x = Math.cos(angle) * radius;
+  const y = Math.sin(angle) * radius;
+  const z = THREE.MathUtils.randFloatSpread(2);
+
+  asteroid.position.set(x, y, z);
+  scene.add(asteroid);
+}
+
+Array(100).fill().forEach(createAsteroid);
+
 //move camera
 function moveCamera() {
 	const t = document.body.getBoundingClientRect().top;
