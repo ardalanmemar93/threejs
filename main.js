@@ -16,7 +16,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// Add a controls
+// Add controls
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // Jupiter
@@ -25,12 +25,15 @@ const jupiterMaterial = new THREE.MeshStandardMaterial({ color: 0xffcc00 });
 const jupiter = new THREE.Mesh(jupiterGeometry, jupiterMaterial);
 scene.add(jupiter);
 
-// Jupiter Ring
-const ringGeometry = new THREE.RingGeometry(12, 20, 64);
-const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x884400, side: THREE.DoubleSide });
-const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-ring.rotation.x = Math.PI / 3; // Tilt the ring for a more realistic appearance
-scene.add(ring);
+// Jupiter Rings
+const numberOfRings = 3;
+for (let i = 0; i < numberOfRings; i++) {
+  const ringGeometry = new THREE.RingGeometry(12 + i * 2, 14 + i * 2, 64);
+  const ringMaterial = new THREE.MeshBasicMaterial({ color: 0x884400, side: THREE.DoubleSide });
+  const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+  ring.rotation.x = Math.PI / 4 + (i * Math.PI) / 8; // Tilt each ring for a more interesting appearance
+  scene.add(ring);
+}
 
 // Ambient Light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
@@ -57,7 +60,12 @@ function animate() {
   requestAnimationFrame(animate);
 
   jupiter.rotation.y += 0.005; // Rotate Jupiter
-  ring.rotation.x += 0.005; // Rotate the ring
+
+  scene.children.forEach((child) => {
+    if (child instanceof THREE.Mesh && child !== jupiter) {
+      child.rotation.x += 0.01; // Rotate each ring along the x-axis
+    }
+  });
 
   controls.update();
   renderer.render(scene, camera);
