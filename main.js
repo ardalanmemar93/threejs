@@ -90,6 +90,42 @@ const createTree = (position) => {
 	createTree(treePosition);
   }
 
+
+
+  // Function to create a creature
+const createCreature = (position) => {
+	const bodyGeometry = new THREE.BoxGeometry(8, 8, 8);
+	const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0xFF4500 });
+	const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+  
+	const headGeometry = new THREE.SphereGeometry(6, 32, 32);
+	const headMaterial = new THREE.MeshStandardMaterial({ color: 0xFF6347 });
+	const head = new THREE.Mesh(headGeometry, headMaterial);
+	head.position.set(0, 10, 0);
+  
+	const tailGeometry = new THREE.CylinderGeometry(1, 3, 20, 8);
+	const tailMaterial = new THREE.MeshStandardMaterial({ color: 0xFF4500 });
+	const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+	tail.position.set(0, -15, 0);
+  
+	const legsGeometry = new THREE.BoxGeometry(2, 10, 2);
+	const legsMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+	const legs1 = new THREE.Mesh(legsGeometry, legsMaterial);
+	const legs2 = new THREE.Mesh(legsGeometry, legsMaterial);
+	legs1.position.set(-3, -7, 0);
+	legs2.position.set(3, -7, 0);
+  
+	const creature = new THREE.Group();
+	creature.add(body, head, tail, legs1, legs2);
+	creature.position.copy(position);
+  
+	scene.add(creature);
+  };
+  
+  // Create a creature in the middle of the scene
+  createCreature(new THREE.Vector3(0, 5, 0));
+  
+
 // Create a Skyscraper
 createSkyscraper(20, 20, 10, 2, 6, 0x808080, new THREE.Vector3(-40, 0, 30));
 
