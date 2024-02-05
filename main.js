@@ -26,56 +26,42 @@ const ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -Math.PI / 2;
 scene.add(ground);
 
-// Create Buildings with Windows (Lit from Inside)
-const createBuilding = (width, height, depth, color, position, numWindows) => {
-  const buildingGeometry = new THREE.BoxGeometry(width, height, depth);
-  const buildingMaterial = new THREE.MeshStandardMaterial({ color });
-  const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
-  building.position.copy(position);
-  scene.add(building);
+// Create Skyscraper
+const createSkyscraper = (width, depth, numFloors, numWindowsPerFloor, color, position) => {
+  const floorHeight = 5;
+  const windowWidth = width / (numWindowsPerFloor + 1);
+  const windowHeight = floorHeight / 2;
 
-  // Create windows on each side with emissive material to simulate lighting
-  for (let i = 0; i < numWindows; i++) {
-    const windowWidth = width / (numWindows + 1);
-    const windowHeight = height / 4;
-    const windowGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, 1);
+  for (let floor = 0; floor < numFloors; floor++) {
+    const buildingGeometry = new THREE.BoxGeometry(width, floorHeight, depth);
+    const buildingMaterial = new THREE.MeshStandardMaterial({ color });
+    const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
 
-    const emissiveColor = new THREE.Color(0xff0000); // Adjust emissive color as needed
-    const emissiveIntensity = 1;
+    building.position.set(position.x, position.y + floor * floorHeight, position.z);
+    scene.add(building);
 
-    const windowMaterial = new THREE.MeshStandardMaterial({
-      color: 0x000000,
-      emissive: emissiveColor,
-      emissiveIntensity,
-    });
+    // Create windows on each floor
+    for (let i = 0; i < numWindowsPerFloor; i++) {
+      const windowGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, 1);
+      const windowMaterial = new THREE.MeshStandardMaterial({
+        color: 0x000000,
+        emissive: new THREE.Color(0xffcc00), // Adjust emissive color as needed
+        emissiveIntensity: 1,
+      });
 
-    const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
+      const windowMesh = new THREE.Mesh(windowGeometry, windowMaterial);
 
-    const offsetX = (i + 1) * windowWidth - width / 2;
-    const offsetY = height / 8;
+      const offsetX = (i + 1) * windowWidth - width / 2;
+      const offsetY = floorHeight / 4;
 
-    windowMesh.position.set(offsetX, offsetY, depth / 2 + 0.5);
-    building.add(windowMesh);
+      windowMesh.position.set(offsetX, offsetY, depth / 2 + 0.5);
+      building.add(windowMesh);
+    }
   }
 };
 
-// Create Roads
-const createRoad = (length, width, color, position, rotation) => {
-  const roadGeometry = new THREE.BoxGeometry(length, 0.1, width);
-  const roadMaterial = new THREE.MeshStandardMaterial({ color });
-  const road = new THREE.Mesh(roadGeometry, roadMaterial);
-  road.position.copy(position);
-  road.rotation.y = rotation;
-  scene.add(road);
-};
-
-// Create a more complex city layout
-createBuilding(30, 160, 30, 0x808080, new THREE.Vector3(-40, 80, 30), 4);
-createBuilding(40, 200, 40, 0x606060, new THREE.Vector3(0, 100, 0), 5);
-createBuilding(35, 180, 35, 0x909090, new THREE.Vector3(40, 90, -30), 3);
-
-createRoad(120, 10, 0x888888, new THREE.Vector3(0, 0, 0), 0);
-createRoad(120, 10, 0x888888, new THREE.Vector3(0, 0, -50), Math.PI / 2);
+// Create a Skyscraper
+createSkyscraper(20, 20, 10, 4, 0x808080, new THREE.Vector3(-40, 0, 30));
 
 // Ambient Light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
