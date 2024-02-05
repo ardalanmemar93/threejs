@@ -39,40 +39,48 @@ const lightHelper = new THREE.PointLightHelper(pointLight);
 scene.add(lightHelper);
 
 // Add a grid helper
-const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(gridHelper);
+// const gridHelper = new THREE.GridHelper(200, 50);
+// scene.add(gridHelper);
 
 // Add a controls
 const controls = new OrbitControls(camera, renderer.domElement);
 
 
 
-function addStar() {
-	const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-	const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-	const star = new THREE.Mesh(geometry, material);
+// Create a Starfield
+const starfieldGeometry = new THREE.BufferGeometry();
+const starfieldMaterial = new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.1 });
 
-	const [x, y, z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+const starfieldVertices = [];
+for (let i = 0; i < 5000; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.random() * Math.PI - Math.PI / 2;
+  const radius = 500;
 
-	star.position.set(x, y, z);
-	scene.add(star);
+  const x = Math.cos(theta) * Math.cos(phi) * radius;
+  const y = Math.sin(phi) * radius;
+  const z = Math.sin(theta) * Math.cos(phi) * radius;
+
+  starfieldVertices.push(x, y, z);
 }
 
-Array(200).fill().forEach(addStar);
+starfieldGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starfieldVertices, 3));
+const starfield = new THREE.Points(starfieldGeometry, starfieldMaterial);
+scene.add(starfield);
 
 // Add a background
 const spaceTexture = new THREE.TextureLoader().load('dark-space.jpeg');
 scene.background = spaceTexture;
 
 // Add a avatar
-const avatarTexture = new THREE.TextureLoader().load('akira-bike.jpeg');
-const avatar = new THREE.Mesh(
-	new THREE.BoxGeometry(5, 5, 10),
-	new THREE.MeshBasicMaterial({ map: avatarTexture })
-);
-scene.add(avatar);
-avatar.position.z = -10;
-avatar.position.x = 2;
+// const avatarTexture = new THREE.TextureLoader().load('akira-bike.jpeg');
+// const avatar = new THREE.Mesh(
+// 	new THREE.BoxGeometry(5, 5, 10),
+// 	new THREE.MeshBasicMaterial({ map: avatarTexture })
+// );
+// scene.add(avatar);
+// avatar.position.z = -10;
+// avatar.position.x = 2;
 
 
 // Add a sun
