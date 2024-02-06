@@ -112,7 +112,7 @@ const createCreature = (position) => {
 	const legsMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
 	const legs1 = new THREE.Mesh(legsGeometry, legsMaterial);
 	const legs2 = new THREE.Mesh(legsGeometry, legsMaterial);
-	legs1.position.set(-3, -7, 0);
+	legs1.position.set(-5, -7, 0);
 	legs2.position.set(3, -7, 0);
   
 	const creature = new THREE.Group();
@@ -148,6 +148,38 @@ window.addEventListener('resize', () => {
 
   renderer.setSize(newWidth, newHeight);
 });
+
+
+// Function to create a UFO
+const createUFO = (position) => {
+	const saucerGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+	const saucerMaterial = new THREE.MeshStandardMaterial({
+	  color: 0x808080,
+	  emissive: 0xffff00, // Yellow emissive lights
+	  emissiveIntensity: 0.5,
+	  metalness: 0.5,
+	});
+	const saucer = new THREE.Mesh(saucerGeometry, saucerMaterial);
+  
+	const lightGeometry = new THREE.PointLight(0xffff00, 2, 30);
+	const light = new THREE.PointLight(lightGeometry.color, lightGeometry.intensity, lightGeometry.distance);
+	light.position.set(0, 0, 10);
+	saucer.add(light);
+  
+	saucer.position.copy(position);
+	scene.add(saucer);
+  
+	return saucer;
+  };
+  
+  // Create a UFO hovering above the city
+  const ufo = createUFO(new THREE.Vector3(0, 100, 50));
+  
+  // Animate the UFO's rotation
+  function animateUFO() {
+	ufo.rotation.y += 0.01;
+	ufo.rotation.z += 0.005;
+  }
 
 // Animation
 function animate() {
