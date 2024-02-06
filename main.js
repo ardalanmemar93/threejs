@@ -223,6 +223,41 @@ const createPlanetWithRing = (position) => {
 	planetWithRing.rotation.y += 0.005;
   }
 
+  // Function to create a rotating star cluster
+const createStarCluster = (position, color, numStars, clusterRadius) => {
+	const starCluster = new THREE.Group();
+  
+	for (let i = 0; i < numStars; i++) {
+	  const starGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+	  const starMaterial = new THREE.MeshStandardMaterial({ color });
+	  const star = new THREE.Mesh(starGeometry, starMaterial);
+  
+	  const theta = Math.random() * Math.PI * 2;
+	  const phi = Math.random() * Math.PI - Math.PI / 2;
+	  const radius = Math.random() * clusterRadius;
+  
+	  const x = Math.cos(theta) * Math.cos(phi) * radius;
+	  const y = Math.sin(phi) * radius;
+	  const z = Math.sin(theta) * Math.cos(phi) * radius;
+  
+	  star.position.set(x, y, z);
+	  starCluster.add(star);
+	}
+  
+	starCluster.position.copy(position);
+	scene.add(starCluster);
+  
+	return starCluster;
+  };
+  
+  // Create a rotating star cluster
+  const rotatingStarCluster = createStarCluster(new THREE.Vector3(-30, 80, 0), 0xFFFFFF, 100, 30);
+  
+  // Animate the rotation of the star cluster
+  function animateRotatingStarCluster() {
+	rotatingStarCluster.rotation.y += 0.005;
+  }
+
 
 // Animation
 function animate() {
