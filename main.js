@@ -417,6 +417,44 @@ const createFerrisWheel = (position, radius, numSpokes, numSeats) => {
   // Create a Ferris wheel in the scene
   createFerrisWheel(new THREE.Vector3(0, 20, 40), 15, 8, 16);
 
+  // Function to create a campfire
+const createCampfire = (position) => {
+	const fireGeometry = new THREE.ConeGeometry(2, 5, 8);
+	const fireMaterial = new THREE.MeshBasicMaterial({ color: 0xFF4500 });
+	const fire = new THREE.Mesh(fireGeometry, fireMaterial);
+	fire.position.copy(position);
+  
+	// Create a fire particles system
+	const fireParticlesGeometry = new THREE.BufferGeometry();
+	const fireParticlesMaterial = new THREE.PointsMaterial({
+	  color: 0xFFD700,
+	  size: 0.2,
+	  transparent: true,
+	  opacity: 0.8,
+	});
+  
+	const fireParticlesVertices = [];
+	for (let i = 0; i < 500; i++) {
+	  const radius = Math.random() * 2;
+	  const theta = Math.random() * Math.PI * 2;
+	  const x = Math.cos(theta) * radius;
+	  const z = Math.sin(theta) * radius;
+  
+	  fireParticlesVertices.push(x, Math.random() * 3, z);
+	}
+  
+	fireParticlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(fireParticlesVertices, 3));
+	const fireParticles = new THREE.Points(fireParticlesGeometry, fireParticlesMaterial);
+	fire.add(fireParticles);
+  
+	scene.add(fire);
+  
+	return fire;
+  };
+  
+  // Create a campfire in the scene
+  createCampfire(new THREE.Vector3(0, 0, 0));
+
 
 
 
