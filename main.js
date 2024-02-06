@@ -304,6 +304,43 @@ const createBird = (position) => {
 	});
   }
 
+  // Function to create a firework
+const createFirework = () => {
+	const fireworkGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+	const fireworkMaterial = new THREE.MeshBasicMaterial({ color: getRandomColor() });
+	const firework = new THREE.Mesh(fireworkGeometry, fireworkMaterial);
+  
+	const startPosition = new THREE.Vector3(THREE.MathUtils.randFloatSpread(40), 20, THREE.MathUtils.randFloatSpread(40));
+	firework.position.copy(startPosition);
+  
+	scene.add(firework);
+  
+	return firework;
+  };
+  
+  // Function to generate a random color
+  const getRandomColor = () => {
+	const colors = [0xFF0000, 0x00FF00, 0x0000FF, 0xFFA500, 0xFF00FF, 0xFFFF00];
+	const randomIndex = Math.floor(Math.random() * colors.length);
+	return colors[randomIndex];
+  };
+  
+  // Function to animate the fireworks
+  const animateFireworks = (fireworks) => {
+	fireworks.forEach((firework) => {
+	  firework.position.y -= 0.2;
+	  if (firework.position.y <= 0) {
+		firework.position.y = 20;
+		firework.position.x = THREE.MathUtils.randFloatSpread(40);
+		firework.position.z = THREE.MathUtils.randFloatSpread(40);
+		firework.material.color.set(getRandomColor());
+	  }
+	});
+  };
+  
+  // Create an array to hold multiple fireworks
+  const fireworks = Array(50).fill().map(createFirework);
+
 
 
 
@@ -318,6 +355,7 @@ function animate() {
   animatePlanetWithRing();
   animateRotatingStarCluster();
   animateBirdFlock();
+  animateFireworks(fireworks);
 }
 
 animate();
