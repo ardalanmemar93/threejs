@@ -258,39 +258,7 @@ const createStarCluster = (position, color, numStars, clusterRadius) => {
 	rotatingStarCluster.rotation.y += 0.005;
   }
 
-  // Function to create a swirling vortex
-const createVortex = (position, color, numParticles, vortexRadius) => {
-	const vortex = new THREE.Group();
-  
-	for (let i = 0; i < numParticles; i++) {
-	  const particleGeometry = new THREE.SphereGeometry(0.3, 8, 8);
-	  const particleMaterial = new THREE.MeshStandardMaterial({ color });
-	  const particle = new THREE.Mesh(particleGeometry, particleMaterial);
-  
-	  const theta = Math.random() * Math.PI * 2;
-	  const radius = Math.random() * vortexRadius;
-  
-	  const x = Math.cos(theta) * radius;
-	  const y = Math.sin(theta) * radius;
-	  const z = THREE.MathUtils.randFloatSpread(5);
-  
-	  particle.position.set(x, y, z);
-	  vortex.add(particle);
-	}
-  
-	vortex.position.copy(position);
-	scene.add(vortex);
-  
-	return vortex;
-  };
-  
-  // Create a swirling vortex
-  const swirlingVortex = createVortex(new THREE.Vector3(30, 60, 0), 0x9900FF, 50, 20);
-  
-  // Animate the rotation of the vortex
-  function animateSwirlingVortex() {
-	swirlingVortex.rotation.z += 0.005;
-  }
+
 
 
 // Animation
