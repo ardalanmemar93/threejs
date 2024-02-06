@@ -341,6 +341,34 @@ const createFirework = () => {
   // Create an array to hold multiple fireworks
   const fireworks = Array(50).fill().map(createFirework);
 
+  // Function to create a hot air balloon
+const createHotAirBalloon = (position) => {
+	const balloonGeometry = new THREE.SphereGeometry(3, 32, 32);
+	const balloonMaterial = new THREE.MeshStandardMaterial({ color: 0xFF4500 });
+	const balloon = new THREE.Mesh(balloonGeometry, balloonMaterial);
+  
+	const basketGeometry = new THREE.CylinderGeometry(1.5, 1.5, 2, 16);
+	const basketMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+	const basket = new THREE.Mesh(basketGeometry, basketMaterial);
+	basket.position.set(0, -3, 0);
+  
+	const ropeGeometry = new THREE.CylinderGeometry(0.1, 0.1, 5, 16);
+	const ropeMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
+	const rope = new THREE.Mesh(ropeGeometry, ropeMaterial);
+	rope.position.set(0, -2.5, 0);
+  
+	const balloonGroup = new THREE.Group();
+	balloonGroup.add(balloon, basket, rope);
+	balloonGroup.position.copy(position);
+  
+	scene.add(balloonGroup);
+  
+	return balloonGroup;
+  };
+  
+  // Create a hot air balloon in the scene
+  createHotAirBalloon(new THREE.Vector3(10, 30, 0));
+
 
 
 
