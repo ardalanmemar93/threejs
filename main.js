@@ -258,6 +258,52 @@ const createStarCluster = (position, color, numStars, clusterRadius) => {
 	rotatingStarCluster.rotation.y += 0.005;
   }
 
+  // Function to create a bird
+const createBird = (position) => {
+	const birdGeometry = new THREE.BoxGeometry(2, 0.5, 0.5);
+	const birdMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+	const bird = new THREE.Mesh(birdGeometry, birdMaterial);
+  
+	bird.position.copy(position);
+	bird.rotation.y = Math.PI / 4;
+  
+	scene.add(bird);
+  
+	return bird;
+  };
+  
+  // Function to create a flock of birds
+  const createBirdFlock = (numBirds, flockRadius) => {
+	const birdFlock = new THREE.Group();
+  
+	for (let i = 0; i < numBirds; i++) {
+	  const theta = Math.random() * Math.PI * 2;
+	  const radius = Math.random() * flockRadius;
+  
+	  const x = Math.cos(theta) * radius;
+	  const y = THREE.MathUtils.randFloatSpread(10) + 30;
+	  const z = Math.sin(theta) * radius;
+  
+	  const bird = createBird(new THREE.Vector3(x, y, z));
+	  birdFlock.add(bird);
+	}
+  
+	scene.add(birdFlock);
+  
+	return birdFlock;
+  };
+  
+  // Create a flock of birds
+  const birdFlock = createBirdFlock(20, 50);
+  
+  // Animate the movement of the bird flock
+  function animateBirdFlock() {
+	birdFlock.children.forEach((bird) => {
+	  bird.position.x += 0.1;
+	  if (bird.position.x > 50) bird.position.x = -50;
+	});
+  }
+
 
 
 
@@ -267,6 +313,11 @@ function animate() {
 
   controls.update();
   renderer.render(scene, camera);
+
+  animateUFO();
+  animatePlanetWithRing();
+  animateRotatingStarCluster();
+  animateBirdFlock();
 }
 
 animate();
