@@ -181,6 +181,49 @@ const createUFO = (position) => {
 	ufo.rotation.z += 0.005;
   }
 
+
+// Function to create a planet with ring
+const createPlanetWithRing = (position) => {
+	// Create planet
+	const planetGeometry = new THREE.SphereGeometry(15, 32, 32);
+	const planetMaterial = new THREE.MeshStandardMaterial({ color: 0x2266FF });
+	const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+	planet.position.copy(position);
+	scene.add(planet);
+  
+	// Create ring particles
+	const ringParticlesGeometry = new THREE.BufferGeometry();
+	const ringParticlesMaterial = new THREE.PointsMaterial({ color: 0xFFFFFF, size: 0.5 });
+  
+	const ringParticlesVertices = [];
+	for (let i = 0; i < 500; i++) {
+	  const theta = Math.random() * Math.PI * 2;
+	  const phi = Math.random() * Math.PI;
+	  const radius = 20;
+  
+	  const x = Math.cos(theta) * Math.sin(phi) * radius;
+	  const y = Math.cos(phi) * radius;
+	  const z = Math.sin(theta) * Math.sin(phi) * radius;
+  
+	  ringParticlesVertices.push(x, y, z);
+	}
+  
+	ringParticlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(ringParticlesVertices, 3));
+	const ringParticles = new THREE.Points(ringParticlesGeometry, ringParticlesMaterial);
+	planet.add(ringParticles);
+  
+	return planet;
+  };
+  
+  // Create a planet with a ring
+  const planetWithRing = createPlanetWithRing(new THREE.Vector3(40, 60, 0));
+  
+  // Animate the planet's rotation
+  function animatePlanetWithRing() {
+	planetWithRing.rotation.y += 0.005;
+  }
+
+
 // Animation
 function animate() {
   requestAnimationFrame(animate);
