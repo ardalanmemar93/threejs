@@ -369,6 +369,54 @@ const createHotAirBalloon = (position) => {
   // Create a hot air balloon in the scene
   createHotAirBalloon(new THREE.Vector3(10, 30, 0));
 
+  // Function to create a Ferris wheel
+const createFerrisWheel = (position, radius, numSpokes, numSeats) => {
+	const baseGeometry = new THREE.CylinderGeometry(5, 5, 2, 32);
+	const baseMaterial = new THREE.MeshStandardMaterial({ color: 0x606060 });
+	const base = new THREE.Mesh(baseGeometry, baseMaterial);
+	base.position.set(position.x, position.y - 3, position.z);
+  
+	const wheelGeometry = new THREE.TorusGeometry(radius, 1, 16, 100);
+	const wheelMaterial = new THREE.MeshStandardMaterial({ color: 0x505050 });
+	const wheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+	wheel.rotation.x = Math.PI / 2;
+	wheel.position.set(position.x, position.y, position.z);
+  
+	const spokes = new THREE.Group();
+  
+	for (let i = 0; i < numSpokes; i++) {
+	  const angle = (i / numSpokes) * Math.PI * 2;
+	  const spokeGeometry = new THREE.CylinderGeometry(0.2, 0.2, radius * 2, 16);
+	  const spokeMaterial = new THREE.MeshStandardMaterial({ color: 0x606060 });
+	  const spoke = new THREE.Mesh(spokeGeometry, spokeMaterial);
+	  spoke.rotation.z = angle;
+	  spokes.add(spoke);
+	}
+  
+	const seats = new THREE.Group();
+  
+	for (let i = 0; i < numSeats; i++) {
+	  const angle = (i / numSeats) * Math.PI * 2;
+	  const seatGeometry = new THREE.BoxGeometry(2, 0.2, 1);
+	  const seatMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+	  const seat = new THREE.Mesh(seatGeometry, seatMaterial);
+	  seat.position.set(radius * Math.cos(angle), radius + 1, radius * Math.sin(angle));
+	  seat.rotation.y = angle;
+	  seats.add(seat);
+	}
+  
+	const ferrisWheel = new THREE.Group();
+	ferrisWheel.add(base, wheel, spokes, seats);
+	ferrisWheel.position.copy(position);
+  
+	scene.add(ferrisWheel);
+  
+	return ferrisWheel;
+  };
+  
+  // Create a Ferris wheel in the scene
+  createFerrisWheel(new THREE.Vector3(0, 20, 40), 15, 8, 16);
+
 
 
 
